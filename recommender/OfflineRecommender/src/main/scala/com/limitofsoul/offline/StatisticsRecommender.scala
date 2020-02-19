@@ -22,7 +22,7 @@ case class MongoConfig(uri: String, db: String)
 case class Recommendation(mid: Int, score: Double)
 
 //定义电影类别top10推荐对象
-case class GenresRecommendation(genres: String, rec: Seq[Recommendation])
+case class GenresRecommendation(genres: String, recs: Seq[Recommendation])
 
 object StatisticsRecommender {
 
