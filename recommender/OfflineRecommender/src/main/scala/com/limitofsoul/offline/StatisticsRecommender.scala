@@ -49,14 +49,19 @@ object StatisticsRecommender {
     //创建名为ratings的临时表
     ratingDF.createTempView("ratings")
 
-    //TODO:不同的统计推荐结果
-    //1.历史热门统计：历史评分数据最多 mid,count
+    /**
+     *
+     * TODO:1.历史热门统计：历史评分数据最多 mid,count
+     */
     val rateMoreMoviesDF = spark.sql("select mid,count(mid) as count from ratings group by mid")
-    //把结果写入对应的mongodb表中
+
     Common.storeDFInMongoDB(rateMoreMoviesDF, RATE_MORE_MOVIES)
 
 
-    //2.近期热门统计：按照"yyyyMM"格式选取最近的评分数据，统计评分个数
+    /**
+     *
+     * TODO:2.近期热门统计：按照"yyyyMM"格式选取最近的评分数据，统计评分个数
+     */
     //创建一个日期格式化工具
     val simpleDateFormat = new SimpleDateFormat("yyyyMM")
     //注册udf，把时间戳转换成年月格式
@@ -69,16 +74,22 @@ object StatisticsRecommender {
     //从ratingOfMonth中查找电影在各个月份的评分 mid,count,yearmonth
     val rateMoreRecentlyMoviesDF = spark.sql("select mid,count(mid) as count,yearmonth from ratingOfMonth group by yearmonth,mid order by yearmonth desc,count desc")
 
-    //存入mongodb
     Common.storeDFInMongoDB(rateMoreRecentlyMoviesDF, RATE_MORE_RECENTLY_MOVIES)
 
 
-    //3.优质电影推荐：统计电影的平均评分 mid,avg
+    /**
+     *
+     * TODO:3.优质电影推荐：统计电影的平均评分 mid,avg
+     */
     val averageMoviesDF = spark.sql("select mid,avg(score) as avg from ratings group by mid")
+
     Common.storeDFInMongoDB(averageMoviesDF, AVERAGE_MOVIES)
 
 
-    //4.各类别电影Top统计
+    /**
+     *
+     * TODO:4.各类别电影Top统计
+     */
     //定义所有类别
     val genres = List("Action", "Adventure", "Animation", "Children", "Comedy", "Crime", "Documentary", "Drama", "File-Noir", "Fantasy", "Horror", "IMAX", "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War", "Western")
 
@@ -106,6 +117,7 @@ object StatisticsRecommender {
       .toDF()
 
     Common.storeDFInMongoDB(genresTopMoviesDF, GENRES_TOP_MOVIES)
+
 
     spark.stop()
   }

@@ -24,6 +24,7 @@ object LFMRecommender {
   val USER_MAX_RECOMMENDATION = 20
 
   def main(args: Array[String]): Unit = {
+
     val sparkConf = new SparkConf().setMaster(Common.config("spark.cores")).setAppName("LFMRecommender")
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
     import spark.implicits._
@@ -68,7 +69,8 @@ object LFMRecommender {
 
     Common.storeDFInMongoDB(userRecs, USER_RECS)
 
-    //副产品：基于电影隐特征，计算相似度，得到电影的相似度列表，为实时推荐做基础
+
+    //TODO:副产品：基于电影隐特征，计算相似度，得到电影的相似度列表，为实时推荐做基础
     val movieFeatures = model.productFeatures.map {
       case (mid, features) => (mid, new DoubleMatrix(features))
     }
