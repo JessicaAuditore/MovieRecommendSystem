@@ -44,14 +44,9 @@ object StatisticsRecommender {
       "mongo.db" -> "recommender"
     )
 
-    //创建一个sparkConf
-    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("DataLoader")
-
-    //创建一个sparkSession
+    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("StatisticsRecommender")
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
-
     import spark.implicits._
-
     implicit val mongoConfig = MongoConfig(config("mongo.uri"), config("mongo.db"))
 
     //从mongodb加载数据
