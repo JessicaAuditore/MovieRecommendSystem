@@ -1,7 +1,7 @@
 package com.limitofsoul.offline
 
 import org.apache.spark.SparkConf
-import org.apache.spark.mllib.recommendation.ALS
+import org.apache.spark.mllib.recommendation.{ALS, Rating}
 import org.apache.spark.sql.SparkSession
 import org.jblas.DoubleMatrix
 
@@ -9,9 +9,6 @@ import org.jblas.DoubleMatrix
  *
  * 基于隐语义模型的协同过滤
  */
-
-//只需要rating数据，为了区别mllib里自带的Rating类
-case class MovieRating(uid: Int, mid: Int, score: Double, timestamp: Int)
 
 //定义基于预测评分的用户推荐列表
 case class UserRecs(uid: Int, recs: Seq[Recommendation])
@@ -22,27 +19,20 @@ case class MovieRecs(mid: Int, recs: Seq[Recommendation])
 object LFMRecommender {
 
   //定义表名和常量
-  val MONGODB_RATING_COLLECTION = "Rating"
   val USER_RECS = "UserRecs"
   val MOVIE_RECS = "MovieRecs"
   val USER_MAX_RECOMMENDATION = 20
 
   def main(args: Array[String]): Unit = {
-    val config = Map(
-      "spark.cores" -> "local[*]",
-      "mongo.uri" -> "mongodb://root:xiaokaixian@101.133.167.244:27017/recommender?authSource=admin&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false",
-      "mongo.db" -> "recommender"
-    )
-
-    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("LFMRecommender")
+    val sparkConf = new SparkConf().setMaster(Common.config("spark.cores")).setAppName("LFMRecommender")
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
     import spark.implicits._
-    implicit val mongoConfig = MongoConfig(config("mongo.uri"), config("mongo.db"))
+    implicit val mongoConfig = MongoConfig(Common.config("mongo.uri"), Common.config("mongo.db"))
 
     //加载数据
     val ratingRDD = spark.read
       .option("uri", mongoConfig.uri)
-      .option("collection", MONGODB_RATING_COLLECTION)
+      .option("collection", Common.MONGODB_RATING_COLLECTION)
       .format("com.mongodb.spark.sql")
       .load()
       .as[MovieRating]
@@ -55,7 +45,7 @@ object LFMRecommender {
     val movieRDD = ratingRDD.map(_._2).distinct()
 
     //训练隐语义模型
-    val trainData = ratingRDD.map(x => org.apache.spark.mllib.recommendation.Rating(x._1, x._2, x._3))
+    val trainData = ratingRDD.map(x => Rating(x._1, x._2, x._3))
 
     val (rank, iterations, lambda) = (50, 5, 0.01)
     val model = ALS.train(trainData, rank, iterations, lambda)
@@ -76,12 +66,7 @@ object LFMRecommender {
       }
       .toDF()
 
-    userRecs.write
-      .option("uri", mongoConfig.uri)
-      .option("collection", USER_RECS)
-      .mode("overwrite")
-      .format("com.mongodb.spark.sql")
-      .save()
+    Common.storeDFInMongoDB(userRecs, USER_RECS)
 
     //副产品：基于电影隐特征，计算相似度，得到电影的相似度列表，为实时推荐做基础
     val movieFeatures = model.productFeatures.map {
@@ -107,12 +92,7 @@ object LFMRecommender {
       }
       .toDF()
 
-    movieRecs.write
-      .option("uri", mongoConfig.uri)
-      .option("collection", MOVIE_RECS)
-      .mode("overwrite")
-      .format("com.mongodb.spark.sql")
-      .save()
+    Common.storeDFInMongoDB(movieRecs,MOVIE_RECS)
 
     spark.stop()
   }
@@ -121,5 +101,4 @@ object LFMRecommender {
   def consinSim(movie1: DoubleMatrix, movie2: DoubleMatrix): Double = {
     movie1.dot(movie2) / (movie1.norm2() * movie2.norm2())
   }
-
 }
