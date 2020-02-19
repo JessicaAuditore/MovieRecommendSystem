@@ -8,7 +8,7 @@ import org.apache.spark.sql.SparkSession
 
 /**
  *
- * 离线统计服务
+ * TODO:离线统计服务
  */
 
 //定义电影类别top10推荐对象
@@ -16,7 +16,7 @@ case class GenresRecommendation(genres: String, recs: Seq[Recommendation])
 
 object StatisticsRecommender {
 
-  //统计表的名称
+  //定义表名
   val RATE_MORE_MOVIES = "RateMoreMovies"
   val RATE_MORE_RECENTLY_MOVIES = "RateMoreRecentlyMovies"
   val AVERAGE_MOVIES = "AverageMovies"
@@ -27,7 +27,7 @@ object StatisticsRecommender {
     val sparkConf = new SparkConf().setMaster(Common.config("spark.cores")).setAppName("StatisticsRecommender")
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
     import spark.implicits._
-    implicit val mongoConfig = MongoConfig(Common.config("mongo.uri"), Common.config("mongo.db"))
+    val mongoConfig = MongoConfig(Common.config("mongo.uri"), Common.config("mongo.db"))
 
     //从mongodb加载数据
     val ratingDF = spark.read

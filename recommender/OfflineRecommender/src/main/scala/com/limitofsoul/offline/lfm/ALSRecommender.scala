@@ -1,5 +1,6 @@
-package com.limitofsoul.offline
+package com.limitofsoul.offline.lfm
 
+import com.limitofsoul.offline.{Common, MongoConfig, MovieRating, Recommendation}
 import org.apache.spark.SparkConf
 import org.apache.spark.mllib.recommendation.{ALS, Rating}
 import org.apache.spark.sql.SparkSession
@@ -7,7 +8,7 @@ import org.jblas.DoubleMatrix
 
 /**
  *
- * 基于隐语义模型的协同过滤
+ * TODO:基于隐语义模型(LFM)的协同过滤推荐算法(ALS)
  */
 
 //定义基于预测评分的用户推荐列表
@@ -16,7 +17,7 @@ case class UserRecs(uid: Int, recs: Seq[Recommendation])
 //定义基于LFM电影特征向量的电影相似度列表
 case class MovieRecs(mid: Int, recs: Seq[Recommendation])
 
-object LFMRecommender {
+object ALSRecommender {
 
   //定义表名和常量
   val USER_RECS = "UserRecs"
@@ -28,7 +29,7 @@ object LFMRecommender {
     val sparkConf = new SparkConf().setMaster(Common.config("spark.cores")).setAppName("LFMRecommender")
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
     import spark.implicits._
-    implicit val mongoConfig = MongoConfig(Common.config("mongo.uri"), Common.config("mongo.db"))
+    val mongoConfig = MongoConfig(Common.config("mongo.uri"), Common.config("mongo.db"))
 
     //加载数据
     val ratingRDD = spark.read
@@ -48,7 +49,7 @@ object LFMRecommender {
     //训练隐语义模型
     val trainData = ratingRDD.map(x => Rating(x._1, x._2, x._3))
 
-    val (rank, iterations, lambda) = (50, 5, 0.01)
+    val (rank, iterations, lambda) = (200, 5, 0.1)
     val model = ALS.train(trainData, rank, iterations, lambda)
 
     //基于用户和电影的隐特征，计算预测评分，得到用户推荐列表
