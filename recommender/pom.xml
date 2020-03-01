@@ -14,6 +14,8 @@
     <modules>
         <module>DataLoader</module>
         <module>OfflineRecommender</module>
+        <module>OnlineRecommender</module>
+        <module>ContentRecommender</module>
     </modules>
 
     <dependencyManagement>

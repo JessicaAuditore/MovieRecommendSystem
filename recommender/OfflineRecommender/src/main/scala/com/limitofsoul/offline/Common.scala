@@ -21,7 +21,7 @@ object Common {
 
   val config = Map(
     "spark.cores" -> "local[*]",
-    "mongo.uri" -> "mongodb://root:xiaokaixian@101.133.167.244:27017/recommender?authSource=admin&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false",
+    "mongo.uri" -> "mongodb://localhost:27017/recommender",
     "mongo.db" -> "recommender"
   )
 

@@ -80,16 +80,16 @@ object Dataloader {
 
     val config = Map(
       "spark.cores" -> "local[*]",
-      "mongo.uri" -> "mongodb://root:xiaokaixian@101.133.167.244:27017/recommender?authSource=admin&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false",
+      "mongo.uri" -> "mongodb://localhost:27017/recommender",
       "mongo.db" -> "recommender",
-      "es.httpHosts" -> "101.133.167.244:9200",
-      "es.transportHosts" -> "101.133.167.244:9300",
+      "es.httpHosts" -> "localhost:9200",
+      "es.transportHosts" -> "localhost:9300",
       "es.index" -> "recommender",
       "es.cluster.name" -> "elasticsearch"
     )
 
     //创建一个sparkConf
-    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("DataLoader")
+    val sparkConf: SparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("DataLoader")
 
     //创建一个sparkSession
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
@@ -130,7 +130,7 @@ object Dataloader {
       }
     ).toDF()
 
-    implicit val mongoConfig = MongoConfig(config("mongo.uri"), config("mongo.db"))
+    implicit val mongoConfig: MongoConfig = MongoConfig(config("mongo.uri"), config("mongo.db"))
 
     //将数据保存到MongoDB
     storeDataInMongoDB(movieDF, ratingDF, tagDF)
@@ -151,7 +151,7 @@ object Dataloader {
     //默认内链接
     val movieWithTagsDF = movieDF.join(newTag, Seq("mid"), "left")
 
-    implicit val esConfig = ESConfig(config("es.httpHosts"), config("es.transportHosts"), config("es.index"), config("es.cluster.name"))
+    implicit val esConfig: ESConfig = ESConfig(config("es.httpHosts"), config("es.transportHosts"), config("es.index"), config("es.cluster.name"))
 
     //将数据保存到ES
     storeDataInES(movieWithTagsDF)
@@ -214,9 +214,8 @@ object Dataloader {
     //需要将TransportHosts添加到esClient中
     val REGEX_HOST_PORT = "(.+):(\\d+)".r
     esConfig.transportHosts.split(",").foreach {
-      case REGEX_HOST_PORT(host: String, port: String) => {
+      case REGEX_HOST_PORT(host: String, port: String) =>
         esClient.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), port.toInt))
-      }
     }
 
     //先清理遗留的数据
