@@ -23,6 +23,7 @@ public class UserService {
 
     @Autowired
     private MongoClient mongoClient;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -81,8 +82,9 @@ public class UserService {
 
     public User findByUsername(String username){
         Document user = getUserCollection().find(new Document("username",username)).first();
-        if(null == user || user.isEmpty())
+        if(null == user || user.isEmpty()) {
             return null;
+        }
         return documentToUser(user);
     }
 
@@ -94,8 +96,9 @@ public class UserService {
 
     public User findByUID(int uid){
         Document user = getUserCollection().find(new Document("uid",uid)).first();
-        if(null == user || user.isEmpty())
+        if(null == user || user.isEmpty()) {
             return null;
+        }
         return documentToUser(user);
     }
 

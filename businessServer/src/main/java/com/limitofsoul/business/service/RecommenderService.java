@@ -67,8 +67,9 @@ public class RecommenderService {
 
     private List<Recommendation> parseRecs(Document document, int maxItems) {
         List<Recommendation> recommendations = new ArrayList<>();
-        if (null == document || document.isEmpty())
+        if (null == document || document.isEmpty()) {
             return recommendations;
+        }
         ArrayList<Document> recs = document.get("recs", ArrayList.class);
         for (Document recDoc : recs) {
             recommendations.add(new Recommendation(recDoc.getInteger("mid"), recDoc.getDouble("score")));

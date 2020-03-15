@@ -36,20 +36,23 @@ public class MovieService {
     private MongoCollection<Document> rateCollection;
 
     private MongoCollection<Document> getMovieCollection(){
-        if(null == movieCollection)
+        if(null == movieCollection) {
             movieCollection = mongoClient.getDatabase(Constant.MONGODB_DATABASE).getCollection(Constant.MONGODB_MOVIE_COLLECTION);
+        }
         return movieCollection;
     }
 
     private MongoCollection<Document> getAverageMoviesScoreCollection(){
-        if(null == averageMoviesScoreCollection)
+        if(null == averageMoviesScoreCollection) {
             averageMoviesScoreCollection = mongoClient.getDatabase(Constant.MONGODB_DATABASE).getCollection(Constant.MONGODB_AVERAGE_MOVIES_SCORE_COLLECTION);
+        }
         return averageMoviesScoreCollection;
     }
 
     private MongoCollection<Document> getRateCollection(){
-        if(null == rateCollection)
+        if(null == rateCollection) {
             rateCollection = mongoClient.getDatabase(Constant.MONGODB_DATABASE).getCollection(Constant.MONGODB_RATING_COLLECTION);
+        }
         return rateCollection;
     }
 

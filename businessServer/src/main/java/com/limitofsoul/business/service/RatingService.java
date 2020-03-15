@@ -31,8 +31,9 @@ public class RatingService {
     private MongoCollection<Document> ratingCollection;
 
     private MongoCollection<Document> getRatingCollection() {
-        if (null == ratingCollection)
+        if (null == ratingCollection) {
             ratingCollection = mongoClient.getDatabase(Constant.MONGODB_DATABASE).getCollection(Constant.MONGODB_RATING_COLLECTION);
+        }
         return ratingCollection;
     }
 
@@ -93,8 +94,9 @@ public class RatingService {
         basicDBObject.append("uid", uid);
         basicDBObject.append("mid", mid);
         FindIterable<Document> documents = getRatingCollection().find(basicDBObject);
-        if (documents.first() == null)
+        if (documents.first() == null) {
             return null;
+        }
         return documentToRating(documents.first());
     }
 
