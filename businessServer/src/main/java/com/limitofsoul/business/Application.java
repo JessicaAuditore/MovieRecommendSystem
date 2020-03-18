@@ -22,7 +22,7 @@ public class Application {
 
         ApplicationContext context = new ClassPathXmlApplicationContext("classpath:application.xml");
 
-        Settings settings = Settings.builder().put("cluster.name","es-cluster").build();
+        Settings settings = Settings.builder().put("cluster.name","elasticsearch").build();
         TransportClient esClient = new PreBuiltTransportClient(settings);
         esClient.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("linux"), 9300));
 

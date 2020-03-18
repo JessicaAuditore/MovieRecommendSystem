@@ -47,8 +47,8 @@ object OnlineRecommender {
       .load()
       .as[MovieRecs]
       .rdd
-      .map{ movieRecs => // 为了查询相似度方便，转换成map
-        (movieRecs.mid, movieRecs.recs.map( x=> (x.mid, x.score) ).toMap )
+      .map { movieRecs => // 为了查询相似度方便，转换成map
+        (movieRecs.mid, movieRecs.recs.map(x => (x.mid, x.score)).toMap)
       }.collectAsMap()
 
     val simMovieMatrixBroadCast = sc.broadcast(simMovieMatrix)
@@ -105,10 +105,11 @@ object OnlineRecommender {
     //从redis读取数据，用户评分数据保存在 uid:UID 为key的队列里，value是 MID:SCORE
     jedis.lrange("uid:" + uid, 0, num - 1)
       .map {
-        item => //具体每个评分又是以冒号分隔的两个值
-          val attr = item.split("\\：")
+        item => // 具体每个评分又是以冒号分隔的两个值
+          val attr = item.split("\\:")
           (attr(0).trim.toInt, attr(1).trim.toDouble)
-      }.toArray
+      }
+      .toArray
   }
 
   //获取跟当前电影最相似的num个电影，作为备选电影 num:相似电影的数量  mid:当前电影ID  uid:当前评分用户ID  simMovies:过滤之后的备选电影
@@ -169,7 +170,7 @@ object OnlineRecommender {
         (mid, scoreList.map(_._2).sum / scoreList.length
           + math.log10(increMap.getOrDefault(mid, 1))
           - math.log10(decreMap.getOrDefault(mid, 1)))
-    }.toArray
+    }.toArray.sortWith(_._2>_._2)
   }
 
   //把推荐数据保存到mongodb中
