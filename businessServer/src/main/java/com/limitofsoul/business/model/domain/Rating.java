@@ -24,7 +24,7 @@ public class Rating {
         this.uid = uid;
         this.mid = mid;
         this.score = score;
-        this.timestamp = new Date().getTime();
+        this.timestamp = System.currentTimeMillis();
     }
 
     public int getUid() {

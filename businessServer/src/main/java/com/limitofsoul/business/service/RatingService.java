@@ -117,5 +117,4 @@ public class RatingService {
         }
         return stats;
     }
-
 }

@@ -49,7 +49,6 @@ public class RecommenderService {
     }
 
 
-
     // 基于内容的推荐算法
     private List<Recommendation> findContentBasedMoreLikeThisRecommendations(int mid, int maxItems) {
         MoreLikeThisQueryBuilder query = QueryBuilders.moreLikeThisQuery(/*new String[]{"name", "descri", "genres", "actors", "directors", "tags"},*/
@@ -59,7 +58,7 @@ public class RecommenderService {
     }
 
     // 实时推荐
-    private List<Recommendation> findStreamRecs(int uid,int maxItems){
+    private List<Recommendation> findStreamRecs(int uid, int maxItems) {
         MongoCollection<Document> streamRecsCollection = mongoClient.getDatabase(Constant.MONGODB_DATABASE).getCollection(Constant.MONGODB_STREAM_RECS_COLLECTION);
         Document streamRecs = streamRecsCollection.find(new Document("uid", uid)).first();
         return parseRecs(streamRecs, maxItems);
@@ -111,7 +110,7 @@ public class RecommenderService {
             hybridRecommendations.add(new Recommendation(recommendation.getMid(), recommendation.getScore() * CB_RATING_FACTOR));
         }
 
-        List<Recommendation> streamRecs = findStreamRecs(productId,maxItems);
+        List<Recommendation> streamRecs = findStreamRecs(productId, maxItems);
         for (Recommendation recommendation : streamRecs) {
             hybridRecommendations.add(new Recommendation(recommendation.getMid(), recommendation.getScore() * SR_RATING_FACTOR));
         }
@@ -178,10 +177,10 @@ public class RecommenderService {
         return parseESResponse(esClient.prepareSearch().setIndices(Constant.ES_INDEX).setTypes(Constant.ES_MOVIE_TYPE).setQuery(query).setSize(request.getSum()).execute().actionGet());
     }
 
-    public List<Recommendation> getTopGenresRecommendations(TopGenresRecommendationRequest request){
+    public List<Recommendation> getTopGenresRecommendations(TopGenresRecommendationRequest request) {
         Document genresTopMovies = mongoClient.getDatabase(Constant.MONGODB_DATABASE).getCollection(Constant.MONGODB_GENRES_TOP_MOVIES_COLLECTION)
-                .find(Filters.eq("genres",request.getGenres())).first();
-        return parseRecs(genresTopMovies,request.getSum());
+                .find(Filters.eq("genres", request.getGenres())).first();
+        return parseRecs(genresTopMovies, request.getSum());
     }
 
 }

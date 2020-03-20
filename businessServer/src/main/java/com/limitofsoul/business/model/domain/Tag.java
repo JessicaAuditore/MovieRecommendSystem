@@ -21,7 +21,7 @@ public class Tag {
         this.uid = uid;
         this.mid = mid;
         this.tag = tag;
-        this.timestamp = new Date().getTime();
+        this.timestamp = System.currentTimeMillis();
     }
 
     public Tag() {
