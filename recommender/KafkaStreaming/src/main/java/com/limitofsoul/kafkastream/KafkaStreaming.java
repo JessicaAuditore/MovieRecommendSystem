@@ -6,7 +6,7 @@ import org.apache.kafka.streams.processor.TopologyBuilder;
 
 import java.util.Properties;
 
-public class Application {
+public class KafkaStreaming {
 
     public static void main(String[] args) {
         String brokers = "localhost:9092";

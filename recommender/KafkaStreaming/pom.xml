@@ -33,7 +33,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.limitofsoul.kafkastream.Application</mainClass>
+                            <mainClass>com.limitofsoul.kafkastream.KafkaStreaming</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
