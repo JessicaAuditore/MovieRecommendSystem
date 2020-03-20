@@ -44,7 +44,7 @@ public class MovieRestApi {
      * @param model
      * @return
      */
-    // TODO: 2017/10/20  bug 混合推荐结果中，基于内容的推荐，基于MID，而非UID
+    //混合推荐结果中，基于内容的推荐，基于MID，而非UID
     @RequestMapping(value = "/guess", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public Model getGuessMovies(@RequestParam("username") String username, @RequestParam("num") int num, Model model) {
