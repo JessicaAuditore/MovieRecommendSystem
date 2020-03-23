@@ -86,10 +86,11 @@ public class MovieService {
         try {
             movie = objectMapper.readValue(JSON.serialize(document), Movie.class);
             Document score = getAverageMoviesScoreCollection().find(Filters.eq("mid", movie.getMid())).first();
-            if (null == score || score.isEmpty())
+            if (null == score || score.isEmpty()) {
                 movie.setScore(0D);
-            else
+            } else {
                 movie.setScore((Double) score.get("avg", 0D));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
