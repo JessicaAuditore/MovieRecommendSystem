@@ -133,7 +133,7 @@ object Dataloader {
     implicit val mongoConfig: MongoConfig = MongoConfig(config("mongo.uri"), config("mongo.db"))
 
     //将数据保存到MongoDB
-    //storeDataInMongoDB(movieDF, ratingDF, tagDF)
+    storeDataInMongoDB(movieDF, ratingDF, tagDF)
 
     //数据预处理，把movie对应的tag信息添加进去，加一列 tag1|tag2|tag3...
     import org.apache.spark.sql.functions._

@@ -79,7 +79,7 @@ object StatisticsRecommender {
 
     /**
      *
-     * TODO:3.优质电影推荐：统计电影的平均评分 mid,avg
+     * TODO:3.优质电影统计：统计电影的平均评分 mid,avg
      */
     val averageMoviesDF = spark.sql("select mid,avg(score) as avg from ratings group by mid")
 
