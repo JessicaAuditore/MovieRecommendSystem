@@ -1,6 +1,6 @@
 package com.limitofsoul.business.rest;
 
-import com.limitofsoul.business.model.domain.User;
+import com.limitofsoul.business.model.entity.User;
 import com.limitofsoul.business.model.request.LoginUserRequest;
 import com.limitofsoul.business.model.request.RegisterUserRequest;
 import com.limitofsoul.business.service.UserService;

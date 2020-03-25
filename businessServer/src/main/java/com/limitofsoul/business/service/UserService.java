@@ -1,12 +1,10 @@
 package com.limitofsoul.business.service;
 
-import com.limitofsoul.business.model.domain.User;
+import com.limitofsoul.business.model.entity.User;
 import com.limitofsoul.business.model.request.LoginUserRequest;
 import com.limitofsoul.business.model.request.RegisterUserRequest;
 import com.limitofsoul.business.utils.Constant;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;

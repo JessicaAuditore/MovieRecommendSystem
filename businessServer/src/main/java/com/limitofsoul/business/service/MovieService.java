@@ -1,7 +1,7 @@
 package com.limitofsoul.business.service;
 
-import com.limitofsoul.business.model.domain.Movie;
-import com.limitofsoul.business.model.domain.Rating;
+import com.limitofsoul.business.model.entity.Movie;
+import com.limitofsoul.business.model.entity.Rating;
 import com.limitofsoul.business.model.recom.Recommendation;
 import com.limitofsoul.business.model.request.NewRecommendationRequest;
 import com.limitofsoul.business.utils.Constant;

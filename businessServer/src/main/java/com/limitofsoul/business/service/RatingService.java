@@ -1,7 +1,7 @@
 package com.limitofsoul.business.service;
 
-import com.limitofsoul.business.model.domain.Rating;
-import com.limitofsoul.business.model.domain.User;
+import com.limitofsoul.business.model.entity.Rating;
+import com.limitofsoul.business.model.entity.User;
 import com.limitofsoul.business.model.request.MovieRatingRequest;
 import com.limitofsoul.business.utils.Constant;
 import com.fasterxml.jackson.core.JsonProcessingException;

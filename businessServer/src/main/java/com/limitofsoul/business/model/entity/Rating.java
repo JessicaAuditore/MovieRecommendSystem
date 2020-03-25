@@ -1,10 +1,8 @@
-package com.limitofsoul.business.model.domain;
+package com.limitofsoul.business.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Date;
-
-public class Tag {
+public class Rating {
 
     @JsonIgnore
     private String _id;
@@ -13,18 +11,18 @@ public class Tag {
 
     private int mid;
 
-    private String tag;
+    private double score;
 
     private long timestamp;
 
-    public Tag(int uid, int mid, String tag) {
-        this.uid = uid;
-        this.mid = mid;
-        this.tag = tag;
-        this.timestamp = System.currentTimeMillis();
+    public Rating() {
     }
 
-    public Tag() {
+    public Rating(int uid, int mid, double score) {
+        this.uid = uid;
+        this.mid = mid;
+        this.score = score;
+        this.timestamp = System.currentTimeMillis();
     }
 
     public int getUid() {
@@ -43,12 +41,12 @@ public class Tag {
         this.mid = mid;
     }
 
-    public String getTag() {
-        return tag;
+    public double getScore() {
+        return score;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setScore(double score) {
+        this.score = score;
     }
 
     public long getTimestamp() {

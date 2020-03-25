@@ -1,4 +1,4 @@
-package com.limitofsoul.business.model.domain;
+package com.limitofsoul.business.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

@@ -1,10 +1,10 @@
 package com.limitofsoul.business.rest;
 
-import com.limitofsoul.business.model.domain.Tag;
+import com.limitofsoul.business.model.entity.Tag;
 import com.limitofsoul.business.model.recom.Recommendation;
 import com.limitofsoul.business.model.request.*;
 import com.limitofsoul.business.service.*;
-import com.limitofsoul.business.model.domain.User;
+import com.limitofsoul.business.model.entity.User;
 import com.limitofsoul.business.utils.Constant;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
